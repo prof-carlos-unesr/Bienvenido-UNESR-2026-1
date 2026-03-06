@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNESR ADMINISTRACIÓN - Experiencia Académica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Playfair+Display:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background: #0f172a; color: white; margin: 0; overflow-x: hidden; }
+        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #424852, #0f172a); }
+        .content-style { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.5rem; 
+            font-weight: 400;
+            font-style: italic;
+            text-decoration: none;
+            line-height: 1.6;
+            color: #f8fafc;
+        }
+        .main-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 50px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); max-width: 900px; width: 95%; margin: auto; }
+        .visualizer-bar { width: 4px; height: 12px; background: #fbbf24; border-radius: 4px; transition: height 0.2s; }
+        .active .visualizer-bar { animation: bounce 0.8s infinite alternate; }
+        @keyframes bounce { from { height: 8px; opacity: 0.5; } to { height: 35px; opacity: 1; } }
+    </style>
+</head>
+<body>
+    <!-- Capa de Entrada Minimalista -->
+    <div id="entrance" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#05080f] transition-all duration-1000">
+        <img src="https://static.wixstatic.com/media/0c89be_ed49e8a6b0ec44e58a1cbba676efabf3.jpg/v1/fill/w_404,h_315,al_c,lg_1,q_80,enc_avif,quality_auto/0c89be_ed49e8a6b0ec44e58a1cbba676efabf3.jp" class="h-40 mb-10 drop-shadow-[0_0_40px_rgba(251,191,36,0.3)] animate-pulse">
+        <h1 class="text-2xl font-black text-yellow-500 tracking-[0.5em] mb-16 uppercase text-center px-4">UNESR ADMINISTRACIÓN</h1>
+        <button onclick="startExperience()" class="bg-yellow-600 hover:bg-yellow-500 text-slate-900 px-12 py-5 rounded-full font-black text-lg transition-all transform hover:scale-105 shadow-2xl shadow-yellow-600/20 tracking-widest uppercase">
+            ENTRAR Y ESCUCHAR MENSAJE
+        </button>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="hero">
+        <div id="mainUI" class="opacity-0 transition-opacity duration-1000 w-full">
+            <img src="https://static.wixstatic.com/media/0c89be_ed49e8a6b0ec44e58a1cbba676efabf3.jpg/v1/fill/w_404,h_315,al_c,lg_1,q_80,enc_avif,quality_auto/0c89be_ed49e8a6b0ec44e58a1cbba676efabf3.jp" class="h-16 mx-auto mb-10 opacity-30">
+            <div class="main-card">
+                <p class="content-style">Bienvenidos líderes Robinsonianos al semestre 2026-1 de Administración. Este nuevo semestre constituye una nueva oportunidad de alcanzar las metas que nos hemos trazado. Inventamos o erramos. Simón Rodríguez</p>
+                <div id="viz" class="flex gap-1.5 justify-center mt-12">
+                    <div class="visualizer-bar" style="animation-delay: 0.1s"></div>
+                    <div class="visualizer-bar" style="animation-delay: 0.2s"></div>
+                    <div class="visualizer-bar" style="animation-delay: 0.3s"></div>
+                    <div class="visualizer-bar" style="animation-delay: 0.4s"></div>
+                </div>
+                <p id="label" class="text-yellow-500/50 text-[10px] font-bold tracking-[0.4em] uppercase mt-6">Escuchando Bienvenida...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = new Audio('Chronicle_of_the_Ascendant.mp3');
+        audio.loop = false;
+
+        function startExperience() {
+            document.getElementById('entrance').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('entrance').style.display = 'none';
+                document.getElementById('mainUI').style.opacity = '1';
+                playSpeech();
+            }, 1000);
+        }
+
+        function playSpeech() {
+            document.getElementById('viz').classList.add('active');
+            const msg = new SpeechSynthesisUtterance("Bienvenidos líderes Robinsonianos al semestre 2026-1 de Administración. Este nuevo semestre constituye una nueva oportunidad de alcanzar las metas que nos hemos trazado. Inventamos o erramos. Simón Rodríguez");
+            msg.rate = 0.9;
+            msg.pitch = 1;
+            msg.lang = 'es-ES';
+            
+            msg.onend = () => {
+                document.getElementById('viz').classList.remove('active');
+                document.getElementById('label').innerText = "Audio de Fondo Activo";
+                audio.play().catch(e => console.log("Audio de fondo no disponible"));
+                
+                const limit = 15;
+                if (limit > 0) {
+                    setTimeout(() => { audio.pause(); document.getElementById('label').innerText = "Fin de la Sesión"; }, limit * 1000);
+                }
+            };
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
